@@ -1,9 +1,11 @@
+import pandas as pd
 import numpy as np
 import scipy.stats
 import scipy.spatial
 from sklearn.model_selection import KFold
 import random
 from sklearn.metrics import mean_squared_error
+
 from math import sqrt
 import math
 import warnings
@@ -31,7 +33,7 @@ def similarity_user(data):
 	user_similarity_jaccard = np.zeros((users,users))
 	user_similarity_pearson = np.zeros((users,users))
 	for user1 in range(users):
-		# print(user1)
+		print(user1)
 		for user2 in range(users):
 			if np.count_nonzero(data[user1]) and np.count_nonzero(data[user2]):
 				# user_similarity_cosine[user1][user2] = 1-scipy.spatial.distance.cosine(data[user1],data[user2])
@@ -135,15 +137,15 @@ def crossValidation(data):
 				pred_pearson = 5
 
 			print(str(user) + "\t" + str(item) + "\t" + str(e[2]) + "\t" + str(pred_cosine) + "\t" + str(pred_jaccard) + "\t" + str(pred_pearson))
-			# pred_rate_cosine.append(pred_cosine)
-			# pred_rate_jaccard.append(pred_jaccard)
+			pred_rate_cosine.append(pred_cosine)
+			pred_rate_jaccard.append(pred_jaccard)
 			pred_rate_pearson.append(pred_pearson)
 
-		# rmse_cosine.append(sqrt(mean_squared_error(true_rate, pred_rate_cosine)))
-		# rmse_jaccard.append(sqrt(mean_squared_error(true_rate, pred_rate_jaccard)))
+		rmse_cosine.append(sqrt(mean_squared_error(true_rate, pred_rate_cosine)))
+		rmse_jaccard.append(sqrt(mean_squared_error(true_rate, pred_rate_jaccard)))
 		rmse_pearson.append(sqrt(mean_squared_error(true_rate, pred_rate_pearson)))
 
-		print(str(sqrt(mean_squared_error(true_rate, pred_rate_cosine))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_jaccard))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_pearson))))
+		print("mean_squared_error: " + str(mean_squared_error(true_rate, pred_rate_pearson)))
 		#raw_input()
 
 	#print sum(rms) / float(len(rms))
@@ -178,7 +180,7 @@ def crossValidation(data):
 
 def predictRating(recommend_data):
 
-	M, sim_user = crossValidation(recommend_data)
+	M, sim_user = crossValidation(recommend_data.values)
 
 	f = open("toBeRated.csv","r")
 	# f = open(sys.argv[2],"r")
@@ -225,8 +227,11 @@ def predictRating(recommend_data):
 	#fw.close()
 	fw_w.close()
 
-recommend_data = readingFile("ratings.csv")
+# recommend_data = readingFile("ratings.csv")
+rating_data = pd.read_table('ratings.dat', sep="::",engine= 'python')
+rating_data.columns = ["UserID", "MovieID", "Rating", "Timestamp"]
+print(rating_data)
 # recommend_data = readingFile(sys.argv[1])
 #crossValidation(recommend_data)
-predictRating(recommend_data)
+predictRating(rating_data)
 

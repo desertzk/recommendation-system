@@ -18,9 +18,7 @@ from collections import defaultdict
 #         users[lines[0]] = {}
 #     users[lines[0]][lines[2]] = float(lines[1])
 
-rating_data = pd.read_csv('ratings.dat',sep ="::")
-rating_data.columns =["UserID","MovieID","Rating","Timestamp"]
-print(rating_data)
+
 
 
 class CF_base(metaclass=ABCMeta):
@@ -174,7 +172,14 @@ if __name__ == '__main__':
                      [3.5, 2.0, 4.5, 0.0, 3.5, 2.0],
                      [3.0, 4.0, 2.0, 3.0, 3.0, 2.0],
                      [4.5, 1.5, 3.0, 5.0, 3.5, 0.0]])
-    cf = CF_svd(k=1, r=3)
-    # cf = CF_knearest(k=1)
+
+    rating_data = pd.read_csv('ratings.dat', sep="::")
+    rating_data.columns = ["UserID", "MovieID", "Rating", "Timestamp"]
+    print(rating_data)
+    Mat = np.zeros((6040, 3952))
+    for e in data:
+        Mat[e[0] - 1][e[1] - 1] = e[2]
+    # cf = CF_svd(k=1, r=3)
+    cf = CF_knearest(k=1)
     print(cf.fit(data))
 

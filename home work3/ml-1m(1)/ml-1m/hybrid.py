@@ -19,7 +19,7 @@ def readingFile(filename):
 	f = open(filename,"r")
 	data = []
 	for row in f:
-		r = row.split(',')
+		r = row.split('::')
 		e = [int(r[0]), int(r[1]), int(r[2])]
 		data.append(e)
 	return data
@@ -55,13 +55,13 @@ def itemData():
 	return data
 
 def similarity_item(data):
-	print "Hello Item"
+	print("Hello Item")
 	#f_i_d = open("sim_item_hybrid.txt","w")
 	item_similarity_cosine = np.zeros((items,items))
 	item_similarity_jaccard = np.zeros((items,items))
 	item_similarity_pearson = np.zeros((items,items))
 	for item1 in range(items):
-		print item1
+		print(item1)
 		for item2 in range(items):
 			if np.count_nonzero(data[item1]) and np.count_nonzero(data[item2]):
 				item_similarity_cosine[item1][item2] = 1-scipy.spatial.distance.cosine(data[item1],data[item2])
