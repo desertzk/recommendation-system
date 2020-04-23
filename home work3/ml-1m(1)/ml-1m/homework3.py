@@ -177,7 +177,7 @@ if __name__ == '__main__':
     rating_data.columns = ["UserID", "MovieID", "Rating", "Timestamp"]
     print(rating_data)
     Mat = np.zeros((6040, 3952))
-    for e in data:
+    for e in rating_data.values:
         Mat[e[0] - 1][e[1] - 1] = e[2]
     # cf = CF_svd(k=1, r=3)
     cf = CF_knearest(k=1)
