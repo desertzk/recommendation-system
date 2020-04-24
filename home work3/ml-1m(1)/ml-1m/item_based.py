@@ -19,7 +19,7 @@ def readingFile(filename):
 	f = open(filename,"r")
 	data = []
 	for row in f:
-		r = row.split(',')
+		r = row.split('::')
 		e = [int(r[0]), int(r[1]), int(r[2])]
 		data.append(e)
 	return data
@@ -74,7 +74,7 @@ def crossValidation(data):
 	rmse_jaccard = []
 	rmse_pearson = []
 	# 这里会报错
-	for train_indices, test_indices in k_fold:
+	for train_indices, test_indices in k_fold.split(data):
 		train = [data[i] for i in train_indices]
 		test = [data[i] for i in test_indices]
 
@@ -143,7 +143,7 @@ def crossValidation(data):
 		rmse_jaccard.append(sqrt(mean_squared_error(true_rate, pred_rate_jaccard)))
 		rmse_pearson.append(sqrt(mean_squared_error(true_rate, pred_rate_pearson)))
 
-		print(str(sqrt(mean_squared_error(true_rate, pred_rate_cosine))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_jaccard))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_pearson))))
+		print("mean_squared_error:"+str(mean_squared_error(true_rate, pred_rate_cosine)) + "\t" + str(mean_squared_error(true_rate, pred_rate_jaccard)) + "\t" + str(mean_squared_error(true_rate, pred_rate_pearson)))
 		#raw_input()
 
 	#print sum(rms) / float(len(rms))
@@ -225,7 +225,7 @@ def predictRating(recommend_data):
 	#fw.close()
 	fw_w.close()
 
-recommend_data = readingFile("ratings.csv")
+recommend_data = readingFile("ratings.dat")
 # recommend_data = readingFile(sys.argv[1])
 #crossValidation(recommend_data)
 predictRating(recommend_data)

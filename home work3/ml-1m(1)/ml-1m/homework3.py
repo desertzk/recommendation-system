@@ -179,7 +179,7 @@ if __name__ == '__main__':
     Mat = np.zeros((6040, 3952))
     for e in rating_data.values:
         Mat[e[0] - 1][e[1] - 1] = e[2]
-    # cf = CF_svd(k=1, r=3)
-    cf = CF_knearest(k=1)
+    cf = CF_svd(k=1, r=3)
+    # cf = CF_knearest(k=1)
     print(cf.fit(data))
 
