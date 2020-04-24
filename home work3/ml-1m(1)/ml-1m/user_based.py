@@ -36,8 +36,8 @@ def similarity_user(data):
 		print(user1)
 		for user2 in range(users):
 			if np.count_nonzero(data[user1]) and np.count_nonzero(data[user2]):
-				# user_similarity_cosine[user1][user2] = 1-scipy.spatial.distance.cosine(data[user1],data[user2])
-				# user_similarity_jaccard[user1][user2] = 1-scipy.spatial.distance.jaccard(data[user1],data[user2])
+				user_similarity_cosine[user1][user2] = 1-scipy.spatial.distance.cosine(data[user1],data[user2])
+				user_similarity_jaccard[user1][user2] = 1-scipy.spatial.distance.jaccard(data[user1],data[user2])
 				# try:
 				if not math.isnan(scipy.stats.pearsonr(data[user1],data[user2])[0]):
 					user_similarity_pearson[user1][user2] = scipy.stats.pearsonr(data[user1],data[user2])[0]
@@ -106,14 +106,14 @@ def crossValidation(data):
 				sim_pearson = sim_user_pearson[user-1]
 				ind = (M[:,item-1] > 0)
 				#ind[user-1] = False
-				# normal_cosine = np.sum(np.absolute(sim_cosine[ind]))
-				# normal_jaccard = np.sum(np.absolute(sim_jaccard[ind]))
+				normal_cosine = np.sum(np.absolute(sim_cosine[ind]))
+				normal_jaccard = np.sum(np.absolute(sim_jaccard[ind]))
 				normal_pearson = np.sum(np.absolute(sim_pearson[ind]))
-				# if normal_cosine > 0:
-				# 	pred_cosine = np.dot(sim_cosine,M[:,item-1])/normal_cosine
-				#
-				# if normal_jaccard > 0:
-				# 	pred_jaccard = np.dot(sim_jaccard,M[:,item-1])/normal_jaccard
+				if normal_cosine > 0:
+					pred_cosine = np.dot(sim_cosine,M[:,item-1])/normal_cosine
+
+				if normal_jaccard > 0:
+					pred_jaccard = np.dot(sim_jaccard,M[:,item-1])/normal_jaccard
 
 				if normal_pearson > 0:
 					pred_pearson = np.dot(sim_pearson,M[:,item-1])/normal_pearson
@@ -220,7 +220,7 @@ def predictRating(recommend_data):
 			pred = 5
 
 		pred_rate.append(pred)
-		print(str(user) + "," + str(item) + "," + str(pred))
+		# print(str(user) + "," + str(item) + "," + str(pred))
 		#fw.write(str(user) + "," + str(item) + "," + str(pred) + "\n")
 		fw_w.write(str(pred) + "\n")
 
