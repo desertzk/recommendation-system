@@ -7,7 +7,7 @@ import numpy as np
 from abc import ABCMeta, abstractmethod
 import numpy as np
 from collections import defaultdict
-
+from sklearn.model_selection import train_test_split
 # fp = open("uid_score_bid", "r")
 #
 # users = {}
@@ -179,7 +179,9 @@ if __name__ == '__main__':
     Mat = np.zeros((6040, 3952))
     for e in rating_data.values:
         Mat[e[0] - 1][e[1] - 1] = e[2]
+
+    mattrain,mattest = train_test_split(Mat, test_size=0.2)
     cf = CF_svd(k=1, r=3)
     # cf = CF_knearest(k=1)
-    print(cf.fit(data))
+    print(cf.fit(mattrain))
 
